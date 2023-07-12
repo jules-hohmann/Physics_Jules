@@ -43,16 +43,16 @@ def sin(a):
     return np.sin(a)
 
 
-# def cos(a):
-#     return np.cos(a)
+def cos(a):
+    return np.cos(a)
 
 
-# def tan(a):
-#     return np.tan(a)
+def tan(a):
+    return np.tan(a)
 
 
-# def cot(a):
-#     return 1 / np.tan(a)
+def cot(a):
+    return 1 / np.tan(a)
 
 
 def __main__():
