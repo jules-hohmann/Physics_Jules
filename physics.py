@@ -67,26 +67,36 @@ def calculate_moment_of_inertia(m, r):
     return I
 
 
-mass = 100
-Volume = 0.1
-thrusterdistance = 0.5
-
-
-def calculate_auv_acceleration(F_magnitude, F_angle):
+def calculate_auv_acceleration(
+    F_magnitude, F_angle, mass=100, Volume=0.1, thrustdistance=0.5
+):
     """takes the magnitude of force and angle of force to find the acceleration, returns a vector"""
     Fx = 2 * np.cos(F_angle) * F_magnitude - 2 * np.sin(F_angle) * F_magnitude
     Fy = 2 * np.sin(F_angle) * F_magnitude - 2 * np.cos(F_angle) * F_magnitude
     ax = Fx / mass
     ay = Fy / mass
-    acceleration = np.array[ax, ay]
+    acceleration = [ax, ay]
     return acceleration
 
 
-inertia = 1
-
-
-def calculate_auv_angular_acceleration(F_magnitude, F_angle):
-    """uses magnitude of force and angle to calculate acceleration"""
+def calculate_auv_angular_acceleration(
+    F_magnitude, F_angle, inertia=1, thrusterdistance=0.5
+):
+    """uses magnitude of force and angle and thrusterdistance to calculate angular acceleration"""
     torque = np.sin(F_angle) * F_magnitude * thrusterdistance
     a = inertia / torque
+    return a
+
+
+def calculate_auv2_acceleration(T, alpha, mass):
+    if mass <= 0:
+        return ValueError
+    if len(T) != 4:
+        return ValueError
+    M = [
+        [np.cos(alpha), np.cos(alpha), -np.cos(alpha), -np.cos(alpha)],
+        [np.sin(alpha), -np.sin(alpha), -np.sin(alpha), np.sin(alpha)],
+    ]
+    F = np.dot(M, T)
+    a = [F[0] / mass, F[1] / mass]
     return a

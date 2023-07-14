@@ -42,7 +42,23 @@ class TestPhysics(unittest.TestCase):
 
     def test_calculate_auv_acceleration(self):
         self.assertEqual(
-            physics.calculate_auv_acceleration(1, math.pi),
+            physics.calculate_auv_acceleration(100, math.pi, 100, 0.1, 0.5),
+            [-2.0000000000000004, 2.0000000000000004],
+        )
+        self.assertEqual(
+            physics.calculate_auv_acceleration(100, math.pi),
+            [-2.0000000000000004, 2.0000000000000004],
+        )
+
+    def test_calculate_auv_angular_acceleration(self):
+        self.assertEqual(physics.calculate_auv_angular_acceleration(1, math.pi / 2), 2)
+
+    def test_calculate_auv2_acceleration(self):
+        self.assertEqual(
+            physics.calculate_auv2_acceleration(
+                [1, 2, 3, 4],
+                0,
+            )
         )
 
 
