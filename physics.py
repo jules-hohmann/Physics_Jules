@@ -100,3 +100,21 @@ def calculate_auv2_acceleration(T, alpha, mass):
     F = np.dot(M, T)
     a = [F[0] / mass, F[1] / mass]
     return a
+
+
+def calculate_auv2_angular_acceleration(T, alpha, L, l, inertia):
+    if len(T) != 4:
+        return ValueError
+    if inertia <= 0:
+        return ValueError
+    r = np.sqrt(np.power(L, 2) + np.power(l, 2))
+    torque = [0, 0, 0, 0]
+    for i in range(4):
+        torque[i] = T[i] * r * np.sin(alpha) * L + T[i] * r * np.cos(alpha) * l
+    a = [
+        torque[0] / inertia,
+        torque[1] / inertia,
+        torque[2] / inertia,
+        torque[3] / inertia,
+    ]
+    return a
