@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 # gravitaional force
 g = 9.81
@@ -113,3 +114,48 @@ def calculate_auv2_angular_acceleration(T, alpha, L, l, inertia):
         torques[i] = T[i] * np.sin(alpha) * L + T[i] * np.cos(alpha) * l
     a = (torques[0] + torques[1] + torques[2] + torques[3]) / inertia
     return a
+
+
+def simulate_auv2_motion(
+    T, alpha, L, l, mass=100, inertia=100, dt=0.1, t_final=10, x0=0, y0=0, theta0=0
+):
+    a = calculate_auv2_acceleration(T, alpha, mass)
+    t = np.arange(0, t_final, dt)
+    ax = np.zeros_like(t)
+    ay = np.zeros_like(t)
+    vx = np.zeros_like(t)
+    vy = np.zeros_like(t)
+    x = np.zeros_like(t)
+    y = np.zeros_like(t)
+
+    angularA = calculate_auv2_angular_acceleration(T, alpha, L, l, inertia)
+    omega = np.zeros_like(t)
+    theta = np.zeros_like(t)
+    for i in range(1, len(t)):
+        ax[i] = a[0]
+        vx[i] = ax[i] * t[i]
+        x[i] = 0.5 * ax[i] * np.power(t[i], 2) + x0
+
+        ay[i] = a[1]
+        vy[i] = ay[i] * t[i]
+        y[i] = 0.5 * ay[i] * np.power(t[i], 2) + y0
+
+        omega[i] = angularA * t[i]
+        theta[i] = 0.5 * angularA * np.power(t[i], 2)
+        pass
+    a = np.array([ax, ay])
+    v = np.array([vx, vy])
+    return (t, x, y, theta, v, omega, a)
+
+
+def plot_auv2_motion(t, x, y, theta, v, omega, a):
+    plt.plot(t, x, label="x")
+    plt.plot(t, y, label="y")
+    plt.plot(t, v[0], label=" X Velocity")
+    plt.plot(t, v[1], label="y velocity")
+    plt.plot(t, a[0], label="X Acceleration")
+    plt.plot(t, a[1], label="y acceleration")
+    plt.xlabel("Time (s)")
+    plt.ylabel("x (m), y(m),  Velocity (m/s), Acceleration (m/s^2)")
+    plt.legend()
+    plt.show()

@@ -1,6 +1,7 @@
 import unittest
 import physics
 import math
+import numpy as np
 
 
 class TestPhysics(unittest.TestCase):
@@ -73,6 +74,49 @@ class TestPhysics(unittest.TestCase):
         self.assertEqual(
             physics.calculate_auv2_angular_acceleration([4, 3, 2, 1], 0, 3, 4, 0),
             ValueError,
+        )
+
+    def test_simulate_auv2_motion(self):
+        output = physics.simulate_auv2_motion([4, 3, 2, 1], 0, 3, 4, 1, 10, 1)
+
+        self.assertEqual(
+            np.allclose(output[0], np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])), True
+        )
+        self.assertEqual(
+            np.allclose(output[1], np.array([0, 2, 8, 18, 32, 50, 72, 98, 128, 162])),
+            True,
+        )
+        self.assertEqual(
+            np.allclose(output[2], np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])), True
+        )
+        self.assertEqual(
+            np.allclose(output[3], np.array([0, 2, 8, 18, 32, 50, 72, 98, 128, 162])),
+            True,
+        )
+        self.assertEqual(
+            np.allclose(
+                output[4],
+                np.array(
+                    [
+                        [0, 4, 8, 12, 16, 20, 24, 28, 32, 36],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ]
+                ),
+            ),
+            True,
+        )
+        self.assertEqual(
+            np.allclose(output[5], np.array([0, 4, 8, 12, 16, 20, 24, 28, 32, 36])),
+            True,
+        )
+        self.assertEqual(
+            np.allclose(
+                output[6],
+                np.array(
+                    [[0, 4, 4, 4, 4, 4, 4, 4, 4, 4], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+                ),
+            ),
+            True,
         )
 
 
